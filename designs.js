@@ -1,17 +1,12 @@
-// Notes on scope
-  // The variables are in global scope as the code is simple
-  // The grid variables in makeGrid are defined only in local scope
-
-// Note on code structure
-  // Functions are declared at the top of the script for good practice
-  // addEventListener code has been refactored into a function
+// The variables are declared as const as per the Style Guide
+// Functions are declared at the top of the script for good practice
 
 // This code adds user inputs to table and colour variables
-var grid = document.getElementById("pixelCanvas"); // assigns pixelCanvas to variable grid
-var rows = document.getElementById("inputHeight"); // assigns inputHeight to variable rows
-var columns = document.getElementById("inputWidth"); // assigns inputWidth to variable columns
-var colour = document.getElementById("colorPicker"); // assigns colorPicker to variable colour
-var form = document.getElementById("sizePicker"); // assigns sizePicker to variable form
+const grid = document.getElementById("pixelCanvas"); // assigns pixelCanvas to variable grid
+const rows = document.getElementById("inputHeight"); // assigns inputHeight to variable rows
+const columns = document.getElementById("inputWidth"); // assigns inputWidth to variable columns
+const colour = document.getElementById("colorPicker"); // assigns colorPicker to variable colour
+const form = document.getElementById("sizePicker"); // assigns sizePicker to variable form
 
 // Defines the function makeGrid
 
@@ -25,27 +20,29 @@ function makeGrid(rows, columns) {
     }
 };
 
-// Defines the function pixelMaker to refactor individual lines of code
+// Declares the reset function to reset the grid
 
-function pixelMaker () {
-
-    // calls makeGrid when grid size is submitted by the user
-    form.addEventListener('submit', function (event) {
-      event.preventDefault();
-      makeGrid(rows, columns)
-    });
-
-    // enables the user to colour individual cells
-    grid.addEventListener('click', function (event) {
-      event.target.style.backgroundColor = colour.value;
-    });
-
-    // Removes the grid when the user clicks on 'reset'
-    // Note that 'reset' button was added to the html file
+function reset () {
+  // Removes the grid when the user clicks on 'reset'
+  // Note that 'reset' button was added to the html file
     form.addEventListener('reset', function () {
-      grid.innerHTML=""
-    });
+        grid.innerHTML=""
+    })
 };
 
-// calls the pixelMaker function
-pixelMaker();
+// calls makeGrid when grid size is submitted by the user
+
+form.addEventListener('submit', function (event) {
+    reset();
+    event.preventDefault();
+    makeGrid(rows, columns)
+//    form.removeEventListener('submit', reset);
+});
+
+// enables the user to colour individual cells only
+
+grid.addEventListener('click', function (event) {
+    if (event.target.nodeName === 'TD') {
+      event.target.style.backgroundColor = colour.value;
+    }
+})
