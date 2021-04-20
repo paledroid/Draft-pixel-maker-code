@@ -1,17 +1,17 @@
-// The variables are declared as const as per the Style Guide
+// The variables are declared as const so that they have block-scope and cannot be reassigned
 // Functions are declared at the top of the script for good practice
+// This code captures dynamic user inputs and fixes their values in const variables
 
-// This code adds user inputs to table and colour variables
-const grid = document.getElementById("pixelCanvas"); // assigns pixelCanvas to variable grid
-const rows = document.getElementById("inputHeight"); // assigns inputHeight to variable rows
-const columns = document.getElementById("inputWidth"); // assigns inputWidth to variable columns
-const colour = document.getElementById("colorPicker"); // assigns colorPicker to variable colour
-const form = document.getElementById("sizePicker"); // assigns sizePicker to variable form
-
-// Defines the function makeGrid
+const grid = document.getElementById("pixelCanvas");
+const rows = document.getElementById("inputHeight");
+const columns = document.getElementById("inputWidth");
+const colour = document.getElementById("colorPicker");
+const form = document.getElementById("sizePicker");
 
 function makeGrid(rows, columns) {
-    // Creates a nested loop and adds rows and cells to the table grid
+    // A nested loop is required to build the rows and cells requested
+    // When the function is first called it clears the previous grid
+    grid.innerHTML=""
     for (a = 0; a < rows.value; a++) {
       let row = grid.insertRow(0);
       for (b = 0; b < columns.value; b++) {
@@ -20,10 +20,9 @@ function makeGrid(rows, columns) {
     }
 };
 
-// Declares the reset function to reset the grid
+// A reset function is included as an option to clear the grid
 
 function reset () {
-  // Removes the grid when the user clicks on 'reset'
   // Note that 'reset' button was added to the html file
     form.addEventListener('reset', function () {
         grid.innerHTML=""
@@ -32,17 +31,22 @@ function reset () {
 
 // calls makeGrid when grid size is submitted by the user
 
-form.addEventListener('submit', function (event) {
-    reset();
-    event.preventDefault();
-    makeGrid(rows, columns)
-//    form.removeEventListener('submit', reset);
-});
+function pixelMaker () {
+  // The submit and click event listeners added to a function to refactor code
+    form.addEventListener('submit', function (event) {
+        reset();
+        event.preventDefault();
+        makeGrid(rows, columns)
+    });
 
-// enables the user to colour individual cells only
+    // Listens for the target cell to enable the user to colour specific cells only
 
-grid.addEventListener('click', function (event) {
-    if (event.target.nodeName === 'TD') {
-      event.target.style.backgroundColor = colour.value;
-    }
-})
+    grid.addEventListener('click', function (event) {
+        if (event.target.nodeName === 'TD') {
+          event.target.style.backgroundColor = colour.value;
+        }
+    })
+}
+
+// A single function is then called to run the programme
+pixelMaker ();
